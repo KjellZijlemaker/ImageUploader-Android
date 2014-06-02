@@ -154,6 +154,7 @@ public class ImageUploader {
 					Log.e("log_tag ******",
 							"Error in http connection " + e.toString());
 					succesError = "Something went wrong";
+					break;
 				}
 
 				// If no exception occours, the message is set

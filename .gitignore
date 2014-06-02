@@ -10,5 +10,6 @@ Thumbs.db
 .settings
 
 #Directories
+
 bin/
 gen/
