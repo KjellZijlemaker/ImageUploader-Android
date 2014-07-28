@@ -34,10 +34,6 @@ public class ImageUploader {
 		this.context = context;
 	}
 
-	public void startUpload() {
-		new CreateImage().execute(realURI);
-	}
-
 	private class CreateImage extends AsyncTask<String, Void, String> {
 
 		// Setting needed variables (all private)
@@ -193,6 +189,11 @@ public class ImageUploader {
 		}	
 	}
 	
+
+	public void startUpload() {
+		new CreateImage().execute(realURI);
+	}
+
 	
 	/**
 	 * Method for getting the imageUrl that was created

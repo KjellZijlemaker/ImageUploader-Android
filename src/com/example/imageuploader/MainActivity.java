@@ -1,5 +1,6 @@
 package com.example.imageuploader;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -8,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 	
 private Button btnChooseImage, btnUploadImage;
 private Uri currImageURI;
@@ -29,11 +29,17 @@ private String imageOnServerUrl;
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		/**
+		 * Buttons for choosing / uploading image and showing image
+		 */
 		btnChooseImage = (Button) this.findViewById(R.id.chooseImage);
 		btnUploadImage = (Button) this.findViewById(R.id.uploadImage);
 		showImage = (ImageView) this.findViewById(R.id.showImage);
 		
 		
+		/**
+		 * Choose image from gallery
+		 */
 		btnChooseImage.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -48,7 +54,9 @@ private String imageOnServerUrl;
 				}
 		});
 
-		
+		/**
+		 * Upload the image
+		 */
 		btnUploadImage.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -58,17 +66,11 @@ private String imageOnServerUrl;
 				
 			}
 		});
-
-		
-		if (savedInstanceState == null) {
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
-		}
 	}
 
 	
 	/**
-	 * To handle when an image is selected from the browser
+	 * To handle when an image is selected from the gallery
 	 */
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -89,12 +91,14 @@ private String imageOnServerUrl;
 	
 	/**
 	 * Convert the image URI to the direct file system path of the image file
+	 * This is usefull for showing the image, but also to get the full image path
+	 * for showing the image in your app
 	 * 
 	 * @param contentUri
-	 *            Url from where the picture excist on the mobile phone
+	 *            Url from where the picture exist on the mobile phone
 	 * @return
 	 */
-	public String getRealPathFromURI(Uri contentUri) {
+	private String getRealPathFromURI(Uri contentUri) {
 		String res = null;
 		String[] proj = { MediaColumns.DATA };
 		Cursor cursor = getContentResolver().query(contentUri, proj, null,
@@ -115,7 +119,7 @@ private String imageOnServerUrl;
 	 * 
 	 * @param url
 	 */
-	public void setImage(String url) {
+	private void setImage(String url) {
 		Bitmap bitmap = BitmapFactory.decodeFile(url);
 		showImage.setImageBitmap(bitmap);
 	}
@@ -123,17 +127,22 @@ private String imageOnServerUrl;
 	/**
 	 * Method for starting the upload AsyncTask
 	 */
-	public void startUpload() {
+	private void startUpload() {
 		
 		if(currImageURI != null){
 		
-		// Creating new handler
+		/**
+		 * Setting up the imageUploader and setting the url that came from the image in the gallery
+		 */
 		ImageUploader imgUploader = new ImageUploader(getRealPathFromURI(currImageURI), MainActivity.this);
+		
+		// Starting the upload
 		imgUploader.startUpload();
 		
 
-		// Getting imageUrl for viewing
+		// Getting imageUrl for viewing on the server (the true server url)
 		imageOnServerUrl = imgUploader.returnImageUrl();
+		
 		}
 		
 		else{

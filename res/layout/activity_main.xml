@@ -27,7 +27,7 @@
             android:layout_below="@+id/textView1"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="26dp"
-            android:src="@drawable/abc_ab_solid_light_holo" />
+            android:src="@drawable/ic_launcher" />
 
         <TextView
             android:id="@+id/textView1"
